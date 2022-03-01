@@ -1,8 +1,21 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useContext, useEffect } from 'react'
 import styles from '../styles/Home.module.css'
+import WrapperComponent from '../common/app'
+import Context from '../common/context'
 
-export default function Home() {
+function Home(props) {
+  useEffect(async () => {
+    const a = await fetch('/api/hello')
+    const b = await a.json()
+    console.log(a, b)
+    console.log(props.data)
+  }, []);
+
+  const context = useContext(Context)
+  console.log(context)
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -66,4 +79,23 @@ export default function Home() {
       </footer>
     </div>
   )
+}
+
+export default WrapperComponent({
+  Component: Home,
+})
+
+export async function getStaticProps(context) {
+  const res = await fetch('http:127.0.0.1:3000/api/test')
+  const data = await res.json()
+
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: { data }, // will be passed to the page component as props
+  }
 }
