@@ -4,7 +4,8 @@ import {inject, observer} from 'mobx-react';
 import React from 'react';
 import {} from 'mobx-react'
 import { injectStore } from '../../common/inject';
-
+@inject('Todo')
+@observer
 class Login extends React.Component {
     constructor(props) {
         super(props)
@@ -14,7 +15,7 @@ class Login extends React.Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.Todo)
+        // console.log(this.props.Todo)
     }
     onChangeThis() {
         this.setState({
@@ -24,12 +25,19 @@ class Login extends React.Component {
     render() {
         const {todos} = this.store
         const {name} = this.state
+        console.log(this.props.Todo)
         return (
             <div>
-                mobx
+                {this.props.Todo.num}
                 <button onClick={() => {
-                    this.store.add([1,2,3,4])
-                    this.onChangeThis()
+                    this.props.Todo.numAdd()
+                }}>add</button>
+                <div>-----------,-----------</div>
+                mobx
+                {this.props.Todo.todos.length}
+                <button onClick={() => {
+                    this.props.Todo.add([1,2,3,4])
+                    // this.onChangeThis()
                 }}>点击</button>
                 <button onClick={() => {
                     console.log(this.store.todos)
@@ -48,6 +56,6 @@ class Login extends React.Component {
     }
 }
 
-export default injectStore(inject('Todo')(observer(Login)), {
+export default injectStore(Login, {
     Todo: Todo
 })
